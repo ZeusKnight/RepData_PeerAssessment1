@@ -2,7 +2,7 @@
 
 
 ## Loading and preprocessing the data
-```{r simulation}
+```{r}
 data = read.csv("activity.csv")
 head(data)
 data_no_na = data[which(!is.na(data$steps)),]
@@ -10,7 +10,7 @@ head(data_no_na)
 ```
 ## What is mean total number of steps taken per day?
 
-```{r simulation}
+```{r}
 ggplot(data_no_na, aes(as.Date(data_no_na$date), data_no_na$steps)) + geom_bar(stat = "identity") + scale_x_date(breaks = "7 days", labels=date_format("%Y-%m-%d")) + xlab("Date") + ylab("Steps")
 mean_date = data.frame(mean = sapply(unique(data_no_na$date), function(x) mean(data_no_na[which(data_no_na$date == x),]$steps)), date = unique(data_no_na$date))
 summary(mean_date)
@@ -26,7 +26,7 @@ interval_data = data.frame(mean = sapply(unique(data_no_na$interval), function(x
 tail(interval_data[order(interval_data$mean),], n=1)$interval
 ```
 ## Imputing missing values
-```{r simulation}
+```{r}
 nrow(data[which(is.na(data$steps)),])
 
 for(i in 1:nrow(data)) {
@@ -42,13 +42,13 @@ for(i in 1:nrow(data)) {
 summary(data)
 ```
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r simulation}
+```{r}
 ggplot(data, aes(as.Date(data$date), data$steps)) + geom_bar(stat = "identity") + scale_x_date(breaks = "7 days", labels=date_format("%Y-%m-%d")) + xlab("Date") + ylab("Steps")
 mean_date_new = data.frame(mean = sapply(unique(data$date), function(x) mean(data[which(data$date == x),]$steps)), date = unique(data$date))
 median_date_new = data.frame(median = sapply(unique(data$date), function(x) median(data[which(data$date == x),]$steps)), date = unique(data$date))
 ```
 Is it the same for mean?
-```{r simulation}
+```{r}
 test1 <- function() {
     c = TRUE
     for(i in 1:nrow(mean_date)) {
@@ -61,7 +61,7 @@ test1 <- function() {
 }
 ```
 Is it the same for median?
-```{r simulation}
+```{r}
 test1()
 test2 <- function() {
     c = TRUE
@@ -77,7 +77,7 @@ test2()
 ```
 
 Graph for weekday and weekend:
-```{r simulation}
+```{r}
 days = weekdays(as.Date(data$date))
 
 for(i in 1:length(days)) {
