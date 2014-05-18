@@ -2,19 +2,102 @@
 
 
 ## Loading and preprocessing the data
-
-
-
+```{r simulation}
+data = read.csv("activity.csv")
+head(data)
+data_no_na = data[which(!is.na(data$steps)),]
+head(data_no_na)
+```
 ## What is mean total number of steps taken per day?
 
-
-
+```{r simulation}
+ggplot(data_no_na, aes(as.Date(data_no_na$date), data_no_na$steps)) + geom_bar(stat = "identity") + scale_x_date(breaks = "7 days", labels=date_format("%Y-%m-%d")) + xlab("Date") + ylab("Steps")
+mean_date = data.frame(mean = sapply(unique(data_no_na$date), function(x) mean(data_no_na[which(data_no_na$date == x),]$steps)), date = unique(data_no_na$date))
+summary(mean_date)
+mean_date
+median_date = data.frame(median = sapply(unique(data_no_na$date), function(x) median(data_no_na[which(data_no_na$date == x),]$steps)), date = unique(data_no_na$date))
+summayr(median_date)
+median_date
+```
 ## What is the average daily activity pattern?
-
-
-
+```{r simulation}
+ggplot(data_no_na, aes(unique(data_no_na$interval), sapply(unique(data_no_na$interval), function(x) mean(data_no_na[which(data_no_na$interval == x),]$steps)))) + geom_line(stat = "identity") + xlab("Date") + ylab("Steps")
+interval_data = data.frame(mean = sapply(unique(data_no_na$interval), function(x) mean(data_no_na[which(data_no_na$interval == x),]$steps)), interval = unique(data_no_na$interval))
+tail(interval_data[order(interval_data$mean),], n=1)$interval
+```
 ## Imputing missing values
+```{r simulation}
+nrow(data[which(is.na(data$steps)),])
 
-
-
+for(i in 1:nrow(data)) {
+    if(is.na(data[i,1])){
+        if(data[[i,2]] %in% mean_date$date){
+            data[i, 1] = mean_date[which(mean_date$date == x[i,2]),]$steps
+        }
+        else{
+            data[i, 1] = 0
+        }
+    }        
+}
+summary(data)
+```
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r simulation}
+ggplot(data, aes(as.Date(data$date), data$steps)) + geom_bar(stat = "identity") + scale_x_date(breaks = "7 days", labels=date_format("%Y-%m-%d")) + xlab("Date") + ylab("Steps")
+mean_date_new = data.frame(mean = sapply(unique(data$date), function(x) mean(data[which(data$date == x),]$steps)), date = unique(data$date))
+median_date_new = data.frame(median = sapply(unique(data$date), function(x) median(data[which(data$date == x),]$steps)), date = unique(data$date))
+```
+Is it the same for mean?
+```{r simulation}
+test1 <- function() {
+    c = TRUE
+    for(i in 1:nrow(mean_date)) {
+        if(mean_date[i, 1] != (mean_date_new[which(mean_date_new$date == mean_date[i, 2]),]$mean)){
+            c = FALSE
+            break
+        }
+    }
+    c
+}
+```
+Is it the same for median?
+```{r simulation}
+test1()
+test2 <- function() {
+    c = TRUE
+    for(i in 1:nrow(median_date)) {
+        if(median_date[i, 1] != (median_date_new[which(median_date_new$date == median_date[i, 2]),]$median)){
+            c = FALSE
+            break
+        }
+    }
+    c
+}
+test2()
+```
+
+Graph for weekday and weekend:
+```{r simulation}
+days = weekdays(as.Date(data$date))
+
+for(i in 1:length(days)) {
+    if(days[i] == "Sunday" || days[i] == "Saturday"){
+        days[i] <- "weekend"
+    }
+    else {
+        days[i] <- "weekday"
+    }
+}
+
+data = cbind(data, days = days)
+
+weekday_data = data[which(data$days == "weekday"),]
+weekend_data = data[which(data$days == "weekend"),]
+weekday_frame = data.frame(steps = sapply(unique(weekday_data$interval), function(x) mean(weekday_data[which(weekday_data$interval == x),]$steps)), interval = unique(weekday_data$interval))
+weekend_frame = data.frame(steps = sapply(unique(weekend_data$interval), function(x) mean(weekend_data[which(weekend_data$interval == x),]$steps)), interval = unique(weekend_data$interval))
+week_frame = rbind(weekday_frame, weekend_frame)
+px1 = xyplot(weekday_frame$steps ~ weekday_frame$interval, type="l")
+px2 = xyplot(weekend_frame$steps ~ weekend_frame$interval, type="l")
+print(px1, position=c(0, .6, 1, 1), more=TRUE)
+print(px2, position=c(0, 0, 1, .4))
+```
