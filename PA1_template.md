@@ -329,14 +329,14 @@ data = cbind(data, days = days)
 weekday_data = data[which(data$days == "weekday"), ]
 weekend_data = data[which(data$days == "weekend"), ]
 weekday_frame = data.frame(steps = sapply(unique(weekday_data$interval), function(x) mean(weekday_data[which(weekday_data$interval == 
-    x), ]$steps)), interval = unique(weekday_data$interval))
+    x), ]$steps)), interval = unique(weekday_data$interval), days = c(rep("weekday", 
+    288)))
 weekend_frame = data.frame(steps = sapply(unique(weekend_data$interval), function(x) mean(weekend_data[which(weekend_data$interval == 
-    x), ]$steps)), interval = unique(weekend_data$interval))
+    x), ]$steps)), interval = unique(weekend_data$interval), days = c(rep("weekend", 
+    288)))
 week_frame = rbind(weekday_frame, weekend_frame)
-px1 = xyplot(weekday_frame$steps ~ weekday_frame$interval, type = "l")
-px2 = xyplot(weekend_frame$steps ~ weekend_frame$interval, type = "l")
-print(px1, position = c(0, 0.6, 1, 1), more = TRUE)
-print(px2, position = c(0, 0, 1, 0.4))
+xyplot(week_frame$steps ~ week_frame$interval | week_frame$days, type = "l", 
+    layout = c(1, 2), xlab = "Interval", ylab = "Number of steps")
 ```
 
 ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
