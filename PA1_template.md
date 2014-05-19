@@ -125,11 +125,18 @@ mean_date
 ```r
 median_date = data.frame(median = sapply(unique(data_no_na$date), function(x) median(data_no_na[which(data_no_na$date == 
     x), ]$steps)), date = unique(data_no_na$date))
-summayr(median_date)
+summary(median_date)
 ```
 
 ```
-## Error: could not find function "summayr"
+##      median          date   
+##  Min.   :0   2012-10-02: 1  
+##  1st Qu.:0   2012-10-03: 1  
+##  Median :0   2012-10-04: 1  
+##  Mean   :0   2012-10-05: 1  
+##  3rd Qu.:0   2012-10-06: 1  
+##  Max.   :0   2012-10-07: 1  
+##              (Other)   :47
 ```
 
 ```r
@@ -206,6 +213,11 @@ ggplot(data_no_na, aes(unique(data_no_na$interval), sapply(unique(data_no_na$int
 ```r
 interval_data = data.frame(mean = sapply(unique(data_no_na$interval), function(x) mean(data_no_na[which(data_no_na$interval == 
     x), ]$steps)), interval = unique(data_no_na$interval))
+```
+
+###Maximum number of steps
+
+```r
 tail(interval_data[order(interval_data$mean), ], n = 1)$interval
 ```
 
@@ -249,6 +261,7 @@ summary(data)
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+###I choose to input the mean instead of NA based on each day, if that particular day contains all NA, then use 0
 
 ```r
 ggplot(data, aes(as.Date(data$date), data$steps)) + geom_bar(stat = "identity") + 
@@ -256,7 +269,7 @@ ggplot(data, aes(as.Date(data$date), data$steps)) + geom_bar(stat = "identity") 
     ylab("Steps")
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
 ```r
 mean_date_new = data.frame(mean = sapply(unique(data$date), function(x) mean(data[which(data$date == 
@@ -265,7 +278,7 @@ median_date_new = data.frame(median = sapply(unique(data$date), function(x) medi
     x), ]$steps)), date = unique(data$date))
 ```
 
-Is it the same for mean?
+###Is it the same for mean?
 
 ```r
 test1 <- function() {
@@ -281,7 +294,7 @@ test1 <- function() {
 }
 ```
 
-Is it the same for median?
+###Is it the same for median?
 
 ```r
 test1()
@@ -311,7 +324,7 @@ test2()
 ```
 
 
-Graph for weekday and weekend:
+###Graph for weekday and weekend:
 
 ```r
 days = weekdays(as.Date(data$date))
@@ -339,5 +352,5 @@ xyplot(week_frame$steps ~ week_frame$interval | week_frame$days, type = "l",
     layout = c(1, 2), xlab = "Interval", ylab = "Number of steps")
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
 
