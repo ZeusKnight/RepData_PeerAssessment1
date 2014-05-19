@@ -226,6 +226,7 @@ tail(interval_data[order(interval_data$mean), ], n = 1)$interval
 ```
 
 ## Imputing missing values
+###I choose to input the mean instead of NA based on each day, if that particular day contains all NA, then use 0
 
 ```r
 nrow(data[which(is.na(data$steps)), ])
@@ -261,7 +262,6 @@ summary(data)
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
-###I choose to input the mean instead of NA based on each day, if that particular day contains all NA, then use 0
 
 ```r
 ggplot(data, aes(as.Date(data$date), data$steps)) + geom_bar(stat = "identity") + 

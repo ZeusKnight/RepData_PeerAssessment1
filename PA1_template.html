@@ -400,6 +400,8 @@ summary(median_date)
 
 <h2>Imputing missing values</h2>
 
+<p>###I choose to input the mean instead of NA based on each day, if that particular day contains all NA, then use 0</p>
+
 <pre><code class="r">nrow(data[which(is.na(data$steps)), ])
 </code></pre>
 
@@ -430,8 +432,6 @@ summary(data)
 </code></pre>
 
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
-
-<p>###I choose to input the mean instead of NA based on each day, if that particular day contains all NA, then use 0</p>
 
 <pre><code class="r">ggplot(data, aes(as.Date(data$date), data$steps)) + geom_bar(stat = &quot;identity&quot;) + 
     scale_x_date(breaks = &quot;7 days&quot;, labels = date_format(&quot;%Y-%m-%d&quot;)) + xlab(&quot;Date&quot;) + 
