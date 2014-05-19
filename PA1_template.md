@@ -292,17 +292,14 @@ test1 <- function() {
     }
     c
 }
-```
-
-###Is it the same for median?
-
-```r
 test1()
 ```
 
 ```
 ## [1] TRUE
 ```
+
+###Is it the same for median?
 
 ```r
 test2 <- function() {

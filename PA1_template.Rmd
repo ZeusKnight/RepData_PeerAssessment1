@@ -63,10 +63,10 @@ test1 <- function() {
     }
     c
 }
+test1()
 ```
 ###Is it the same for median?
 ```{r}
-test1()
 test2 <- function() {
     c = TRUE
     for(i in 1:nrow(median_date)) {
